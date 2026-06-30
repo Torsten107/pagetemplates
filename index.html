@@ -1,0 +1,480 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kern-t: #1a1a2e; --kern-m: #5c5f72; --kern-bg: #f5f5f7;
+    --kern-s: #ffffff; --kern-h: #eeeef3; --kern-b: #c8c9d4;
+    --kern-a: #1a4f9e; --kern-ao: #ffffff;
+    --kern-ib: #1a4f9e; --kern-ibg: #e8eef8;
+    --kern-sb: #1a6e40; --kern-sbg: #e6f4ec;
+    --kern-wb: #8a5800; --kern-wbg: #fef3e2;
+    --kern-db: #b91c1c; --kern-dbg: #fde8e8;
+    --f: 'Fira Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .kt { font-family: var(--f); background: var(--kern-bg); color: var(--kern-t); padding: 24px; min-height: 100%; }
+  .step { display: none; }
+  .step.active { display: block; }
+  .lbl { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--kern-m); margin-bottom: 4px; }
+  .q { font-size: 21px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; }
+  .bc { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .bc span { font-size: 13px; color: var(--kern-m); }
+  .bc .cur { color: var(--kern-t); font-weight: 500; }
+  .bc .sep { opacity: .4; }
+  .back { font-family: var(--f); font-size: 14px; font-weight: 500; color: var(--kern-a); background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 16px; text-decoration: underline; text-underline-offset: 2px; display: block; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; margin-bottom: 0; }
+  .opt { background: var(--kern-s); border: 1.5px solid var(--kern-b); border-radius: 4px; padding: 14px; cursor: pointer; text-align: left; font-family: var(--f); transition: border-color .15s, box-shadow .15s; }
+  .opt:hover, .opt.active { border-color: var(--kern-a); box-shadow: 0 0 0 2px rgba(26,79,158,.15); }
+  .opt.active { background: var(--kern-ibg); }
+  .oi { font-size: 18px; color: var(--kern-a); margin-bottom: 6px; display: block; }
+  .ot { font-size: 14px; font-weight: 600; color: var(--kern-t); display: block; margin-bottom: 2px; }
+  .os { font-size: 12px; color: var(--kern-m); display: block; }
+  .obadge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 2px; background: var(--kern-ibg); color: var(--kern-ib); margin-top: 5px; }
+
+  /* Wireframe */
+  .frage-layout { display: grid; grid-template-columns: 1fr 180px; gap: 16px; margin-bottom: 24px; }
+  .wireframe { background: var(--kern-s); border: 1px solid var(--kern-b); border-radius: 4px; overflow: hidden; }
+  .wf-header { background: #1a1a2e; padding: 6px 10px; display: flex; align-items: center; gap: 6px; }
+  .wf-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.3); }
+  .wf-title { font-size: 10px; color: rgba(255,255,255,.5); margin-left: 4px; }
+  .wf-body { padding: 12px; }
+  .wf-bar { height: 4px; background: var(--kern-a); border-radius: 2px; margin-bottom: 10px; width: 60%; }
+  .wf-block { border-radius: 3px; margin-bottom: 6px; padding: 6px 8px; cursor: pointer; transition: all .15s; border: 1.5px solid transparent; }
+  .wf-block:hover { border-color: var(--kern-a); }
+  .wf-block.wf-active { border-color: var(--kern-a); box-shadow: 0 0 0 2px rgba(26,79,158,.15); }
+  .wf-block-label { font-size: 10px; font-weight: 600; color: var(--kern-m); margin-bottom: 2px; text-transform: uppercase; letter-spacing: .04em; }
+  .wf-block-content { font-size: 11px; color: var(--kern-t); line-height: 1.4; }
+  .wf-nav { background: #f0f0f2; padding: 4px 8px; }
+  .wf-nav-bar { height: 8px; background: #d0d0d8; border-radius: 2px; margin-bottom: 4px; width: 80%; }
+  .wf-nav-bc { height: 5px; background: #d0d0d8; border-radius: 2px; width: 50%; }
+  .wf-progress { height: 3px; background: var(--kern-a); border-radius: 1px; margin: 6px 0; width: 45%; }
+  .wf-radio { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+  .wf-radio-circle { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--kern-b); flex-shrink: 0; }
+  .wf-radio-text { height: 6px; background: var(--kern-b); border-radius: 2px; flex: 1; }
+  .wf-btns { display: flex; gap: 4px; margin-top: 6px; }
+  .wf-btn { height: 14px; border-radius: 2px; flex: 1; }
+  .wf-btn-sec { background: var(--kern-h); border: 1px solid var(--kern-b); }
+  .wf-btn-pri { background: var(--kern-a); }
+
+  /* Sidebar list */
+  .wf-sidebar { display: flex; flex-direction: column; gap: 6px; }
+  .wf-sitem { border-radius: 3px; padding: 7px 10px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid transparent; transition: all .15s; }
+  .wf-sitem:hover { border-color: var(--kern-a); }
+  .wf-sitem.wf-active { background: var(--kern-ibg); border-color: var(--kern-a); color: var(--kern-ib); }
+  .wf-sitem-sub { font-size: 11px; font-weight: 400; color: var(--kern-m); margin-top: 1px; }
+  .wf-sitem.wf-active .wf-sitem-sub { color: var(--kern-ib); opacity: .7; }
+  .wf-sitem-bg { background: var(--kern-h); color: var(--kern-t); }
+
+  /* Rules */
+  .rules { display: flex; flex-direction: column; gap: 16px; }
+  .rule { background: var(--kern-s); border: 1px solid var(--kern-b); border-radius: 4px; padding: 20px; }
+  .rh { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .rt { font-size: 18px; font-weight: 600; line-height: 1.3; }
+  .rid { font-size: 12px; font-family: monospace; color: var(--kern-m); background: var(--kern-h); padding: 2px 8px; border-radius: 2px; flex-shrink: 0; margin-top: 3px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag { font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 2px; }
+  .tpl { background: var(--kern-ibg); color: var(--kern-ib); }
+  .ttov { background: var(--kern-sbg); color: var(--kern-sb); }
+  .tseo { background: var(--kern-wbg); color: var(--kern-wb); }
+  .tstr { background: var(--kern-h); color: var(--kern-m); }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .pill { font-size: 13px; color: var(--kern-m); background: var(--kern-h); padding: 4px 10px; border-radius: 2px; }
+  .pill strong { color: var(--kern-t); font-weight: 500; }
+  .instr { font-size: 14px; line-height: 1.6; background: var(--kern-ibg); border-left: 3px solid var(--kern-a); padding: 10px 14px; margin-bottom: 16px; }
+  .slbl { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--kern-m); margin: 16px 0 8px; }
+  .blocks { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .blk { background: var(--kern-h); border-radius: 4px; padding: 10px 14px; display: grid; grid-template-columns: 24px 1fr auto; gap: 8px; align-items: start; }
+  .bn { font-size: 13px; font-weight: 600; color: var(--kern-a); }
+  .bt { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .bx { font-size: 13px; color: var(--kern-m); line-height: 1.5; grid-column: 2; }
+  .bb { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 2px; background: var(--kern-wbg); color: var(--kern-wb); white-space: nowrap; }
+  .bb.p { background: var(--kern-sbg); color: var(--kern-sb); }
+  .ddg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dd { border-radius: 4px; padding: 12px 14px; }
+  .ddl { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+  .ddo { background: var(--kern-sbg); border-left: 3px solid var(--kern-sb); }
+  .ddo .ddl { color: var(--kern-sb); }
+  .ddn { background: var(--kern-dbg); border-left: 3px solid var(--kern-db); }
+  .ddn .ddl { color: var(--kern-db); }
+  .ddi { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; line-height: 1.5; align-items: flex-start; }
+  .ddo .ddi { color: var(--kern-sb); }
+  .ddn .ddi { color: var(--kern-db); }
+  .dn { font-size: 11px; opacity: .75; display: block; margin-top: 1px; }
+  .ctas { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .btn { font-family: var(--f); font-size: 14px; font-weight: 500; background: var(--kern-a); color: var(--kern-ao); border: none; border-radius: 4px; padding: 10px 18px; cursor: pointer; }
+  .btn2 { background: transparent; color: var(--kern-a); border: 1.5px solid var(--kern-a); }
+  .hint { font-size: 12px; color: var(--kern-m); margin-top: 10px; }
+</style>
+
+<div class="kt">
+  <!-- S0 -->
+  <div id="s0" class="step active">
+    <div class="lbl">Schritt 1 von 2–3</div>
+    <div class="q">Was erstellst du gerade?</div>
+    <div class="opts" id="page-opts"></div>
+  </div>
+
+  <!-- S1: Element-Auswahl -->
+  <div id="s1" class="step">
+    <button class="back" id="back1">← Zurück</button>
+    <div class="bc" id="bc1"></div>
+    <div class="lbl" id="s1lbl"></div>
+    <div class="q">Welches Element schreibst du?</div>
+
+    <!-- Frageseite: Wireframe-Layout -->
+    <div id="frage-layout" class="frage-layout" style="display:none">
+      <div>
+        <div class="wireframe">
+          <div class="wf-header">
+            <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+            <span class="wf-title">Frageseite – Aufbau</span>
+          </div>
+          <div class="wf-nav">
+            <div class="wf-nav-bar"></div>
+            <div class="wf-nav-bc"></div>
+          </div>
+          <div class="wf-body">
+            <div class="wf-progress"></div>
+            <div class="wf-block wf-sitem-bg" id="wf-frage" data-key="frage">
+              <div class="wf-block-label">Frage / Headline</div>
+              <div class="wf-block-content" style="font-weight:600;font-size:13px;">Trifft diese Sache auf Sie zu?</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-erklaer" data-key="erklaer">
+              <div class="wf-block-label">Optional: Erklärtext</div>
+              <div class="wf-block-content">Hier kann eine kurze Erläuterung stehen, z.B. warum Sie nach dieser Sache gefragt werden.</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-einfach" data-key="einfach">
+              <div class="wf-block-label">Optional: Einfach erklärt</div>
+              <div class="wf-block-content" style="color:var(--kern-a);">▼ So funktioniert es in einem bestimmten Sonderfall</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-akko" data-key="akko">
+              <div class="wf-block-label">Optional: Akkordion</div>
+              <div class="wf-block-content" style="color:var(--kern-a);">▼ So funktioniert es in einem bestimmten Sonderfall</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-antwort" data-key="antwort">
+              <div class="wf-block-label">Antwortmöglichkeiten</div>
+              <div class="wf-radio"><div class="wf-radio-circle"></div><div class="wf-radio-text"></div></div>
+              <div class="wf-radio"><div class="wf-radio-circle"></div><div class="wf-radio-text" style="width:60%"></div></div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-notice" data-key="notice">
+              <div class="wf-block-label">Optional: Inline Notice</div>
+              <div class="wf-block-content" style="background:var(--kern-wbg);color:var(--kern-wb);padding:4px 6px;border-radius:2px;font-size:10px;">Tipp oder Warnung</div>
+            </div>
+            <div class="wf-btns">
+              <div class="wf-btn wf-btn-sec"></div>
+              <div class="wf-btn wf-btn-pri"></div>
+            </div>
+          </div>
+        </div>
+        <div class="hint">Klicke auf einen Block im Wireframe oder wähle rechts ein Element.</div>
+      </div>
+      <div class="wf-sidebar" id="wf-sidebar"></div>
+    </div>
+
+    <!-- Übersichtsseite: Wireframe-Layout -->
+    <div id="ueber-layout" class="frage-layout" style="display:none">
+      <div>
+        <div class="wireframe">
+          <div class="wf-header">
+            <div class="wf-dot"></div><div class="wf-dot"></div><div class="wf-dot"></div>
+            <span class="wf-title">Übersichtsseite – Aufbau</span>
+          </div>
+          <div class="wf-nav">
+            <div class="wf-nav-bar"></div>
+            <div class="wf-nav-bc"></div>
+          </div>
+          <div class="wf-body">
+            <div class="wf-block wf-sitem-bg" id="wf-u-head" data-key="u-head">
+              <div class="wf-block-label">Headline (H1)</div>
+              <div class="wf-block-content" style="font-weight:600;font-size:13px;">Erbschein beantragen</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-lead" data-key="u-lead">
+              <div class="wf-block-label">Lead-Absatz</div>
+              <div class="wf-block-content">Hier erfahren Sie, ob Sie einen Erbschein brauchen und wie Sie ihn beantragen.</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-toc" data-key="u-toc">
+              <div class="wf-block-label">Optional: Inhaltsverzeichnis</div>
+              <div class="wf-radio"><div class="wf-radio-circle" style="border-radius:2px;"></div><div class="wf-radio-text" style="width:70%"></div></div>
+              <div class="wf-radio"><div class="wf-radio-circle" style="border-radius:2px;"></div><div class="wf-radio-text" style="width:55%"></div></div>
+              <div class="wf-radio"><div class="wf-radio-circle" style="border-radius:2px;"></div><div class="wf-radio-text" style="width:65%"></div></div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-kurz" data-key="u-kurz">
+              <div class="wf-block-label">Optional: Kurz erklärt</div>
+              <div class="wf-block-content" style="background:var(--kern-ibg);color:var(--kern-ib);padding:5px 7px;border-radius:2px;">Mit einem Erbschein können Sie nachweisen, dass Ihnen ein Erbe zusteht …</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-wegweiser" data-key="u-wegweiser">
+              <div class="wf-block-label">Optional: Wegweiser-CTA</div>
+              <div class="wf-block-content">Sie erfahren, ob Sie einen Erbschein brauchen.</div>
+              <div class="wf-btns"><div class="wf-btn wf-btn-pri" style="flex:0 0 55%"></div></div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-haupt" data-key="u-haupt">
+              <div class="wf-block-label">Inhaltsblöcke (H2)</div>
+              <div class="wf-block-content" style="font-weight:600;font-size:12px;">Dafür benötigen Sie einen Erbschein</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-schritt" data-key="u-schritt">
+              <div class="wf-block-label">Optional: Schrittliste</div>
+              <div class="wf-radio"><div class="wf-radio-circle">1</div><div class="wf-radio-text" style="width:60%"></div></div>
+              <div class="wf-radio"><div class="wf-radio-circle">2</div><div class="wf-radio-text" style="width:75%"></div></div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-verweis" data-key="u-verweis">
+              <div class="wf-block-label">Optional: Verweis-Satz</div>
+              <div class="wf-block-content" style="color:var(--kern-a);">Erfahren Sie mehr über Ratenzahlungen.</div>
+            </div>
+            <div class="wf-block wf-sitem-bg" id="wf-u-formular" data-key="u-formular">
+              <div class="wf-block-label">Optional: Formular-CTA</div>
+              <div class="wf-btns"><div class="wf-btn wf-btn-sec" style="flex:0 0 70%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="hint">Klicke auf einen Block im Wireframe oder wähle rechts ein Element.</div>
+      </div>
+      <div class="wf-sidebar" id="wf-sidebar-ueber"></div>
+    </div>
+
+    <!-- Default: normales Grid -->
+    <div id="default-opts" class="opts"></div>
+  </div>
+
+  <!-- S2: Zielgruppe -->
+  <div id="s2" class="step">
+    <button class="back" id="back2">← Zurück</button>
+    <div class="bc" id="bc2"></div>
+    <div class="lbl">Schritt 3 von 3</div>
+    <div class="q">Für wen schreibst du?</div>
+    <div class="opts" id="aud-opts"></div>
+  </div>
+
+  <!-- S3: Regeln -->
+  <div id="s3" class="step">
+    <button class="back" id="back3">← Zurück</button>
+    <div class="bc" id="bc3"></div>
+    <div class="rules" id="rule-list"></div>
+    <div class="ctas">
+      <button class="btn" id="btn-ex">Weitere Beispiele</button>
+      <button class="btn btn2" id="btn-err">Häufige Fehler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+var page='', elem='', elemKey='', isFrage=false, isUeber=false;
+
+var pages=[
+  {key:'ueber', label:'Übersichtsseite', sub:'Mahnverfahren, Insolvenz …', icon:'ti-layout-list'},
+  {key:'pillar', label:'Pillar Page', sub:'z.B. „Familienrecht"', icon:'ti-files'},
+  {key:'start', label:'Startseite', sub:'Einstieg ins Portal', icon:'ti-home'},
+  {key:'frage', label:'Frageseite', sub:'Simple Flow Page', icon:'ti-help', badge:'Neu'},
+];
+
+var frageElems=[
+  {key:'frage',   label:'Frage / Headline',    sub:'Pflicht',            icon:'ti-help'},
+  {key:'erklaer', label:'Erklärtext',           sub:'Optional',           icon:'ti-info-circle'},
+  {key:'einfach', label:'Einfach erklärt',      sub:'Optional',           icon:'ti-bulb'},
+  {key:'akko',    label:'Detail-Akkordion',     sub:'Optional',           icon:'ti-layout-list'},
+  {key:'notice',  label:'Inline Notice',        sub:'Warnung oder Tipp',  icon:'ti-alert-circle'},
+  {key:'antwort', label:'Antwortmöglichkeiten', sub:'Radio, Tiles, Checkbox', icon:'ti-list-check'},
+];
+
+var ueberElems=[
+  {key:'u-head',      label:'Headline (H1)',          sub:'Pflicht', icon:'ti-heading'},
+  {key:'u-lead',      label:'Lead-Absatz',            sub:'Pflicht', icon:'ti-align-left'},
+  {key:'u-toc',       label:'Inhaltsverzeichnis',     sub:'Optional', icon:'ti-list-check'},
+  {key:'u-kurz',      label:'Kurz erklärt',           sub:'Optional', icon:'ti-bulb'},
+  {key:'u-wegweiser', label:'Wegweiser-CTA',          sub:'Optional', icon:'ti-route'},
+  {key:'u-haupt',     label:'Inhaltsblöcke (H2)',     sub:'Pflicht', icon:'ti-layout-rows'},
+  {key:'u-schritt',   label:'Schrittliste',           sub:'Optional', icon:'ti-list-numbers'},
+  {key:'u-verweis',   label:'Verweis-Satz',           sub:'Optional', icon:'ti-link'},
+  {key:'u-formular',  label:'Formular-CTA',           sub:'Optional', icon:'ti-cursor-text'},
+];
+
+var defaultElems=[
+  {key:'h1',    label:'H1 – Seitentitel', sub:'Erster sichtbarer Titel',  icon:'ti-heading'},
+  {key:'lead',  label:'Lead',             sub:'Einleitungstext',           icon:'ti-align-left'},
+  {key:'haupt', label:'Hauptteil',        sub:'Kerninhalt',                icon:'ti-layout-rows', badge:'Wichtigstes Element'},
+  {key:'cta',   label:'CTA / Button',    sub:'Primäre Handlung',          icon:'ti-cursor-text'},
+  {key:'warn',  label:'Warnhinweis',      sub:'z.B. Betrugswarnung',       icon:'ti-alert-circle'},
+  {key:'seo',   label:'Metadaten / SEO', sub:'Title tag, Description',    icon:'ti-search'},
+];
+
+var auds=[
+  {key:'alle',    label:'Alle Zielgruppen', sub:'Text muss für alle funktionieren', icon:'ti-users'},
+  {key:'buerger', label:'Bürger:innen',     sub:'Ohne Rechtskenntnisse',            icon:'ti-user'},
+  {key:'fach',    label:'Fachpublikum',     sub:'Jurist:innen, Behörden',           icon:'ti-briefcase'},
+];
+
+var rules={
+  frage:[{id:'FQ-001',title:'Eine Frage – eine Sache',tags:[['tpl','Plain Language'],['ttov','Ton'],['tstr','Struktur']],length:'1 Satz, max. 12 Wörter',mandatory:'Pflicht',tone:'„Sie"-Ansprache, aktiv, als Frage',instruction:'Jede Headline fragt genau eine Sache. Lieber mehr Seiten als eine komplexe Frage. Rückbezug auf vorherige Antworten erlaubt – Genitiv bei Namen vermeiden.',blocks:[{n:'1',t:'Formulierung als echte Frage',b:'Pflicht',x:'Endet mit Fragezeichen. Keine versteckten Konditionalfragen.'},{n:'2',t:'Direkte Ansprache „Sie"',b:'Pflicht',x:'„Haben Sie…?" statt „Liegt vor…?" – kein Passiv.'},{n:'3',t:'Rückbezug auf vorherige Antworten',b:'Bedingt',x:'Erlaubt wenn es Relevanz erhöht. Kein Genitiv bei Namen.'}],dos:[{t:'Haben Sie in den letzten 12 Monaten eine Rechtsschutzversicherung genutzt?',n:'Direkt, klar, eine Sache'},{t:'Wie hoch ist Ihr monatliches Nettoeinkommen?',n:'Konkret, eindeutig'}],donts:[{t:'Bitte geben Sie an, ob und in welchem Umfang Sie versichert sind.',n:'Kein Fragezeichen, passiv, unklar'},{t:'Haben Sie eine Versicherung und falls ja, welche Art?',n:'Zwei Fragen in einer'}]}],
+  erklaer:[{id:'FQ-002',title:'Erklärtext: nur wenn wirklich nötig',tags:[['tpl','Plain Language'],['tstr','Struktur']],length:'So kurz wie möglich',mandatory:'Bedingt',tone:'Sachlich, direkt, kein Nominalstil',instruction:'Vermeiden oder kurz halten. Nie wichtige Bedingungen darin verstecken. Verwenden für: Begriffserklärungen, Fundorte, Konsequenzen.',blocks:[{n:'1',t:'Begriffe erklären',b:'Bedingt',x:'Nur wenn ein Begriff in der Frage unklar ist.'},{n:'2',t:'Fundort der Antwort',b:'Bedingt',x:'Konkret: „Das finden Sie auf Seite 2 Ihres Bescheids."'},{n:'3',t:'Konsequenz der Antwort',b:'Bedingt',x:'Ein Satz. „Wir benötigen diese Angabe, um Ihren Freibetrag zu berechnen."'}],dos:[{t:'Das Aktenzeichen finden Sie oben rechts auf dem Bescheid.',n:'Konkreter Fundort'},{t:'Wir benötigen diese Angabe, um Ihren Freibetrag zu berechnen.',n:'Klare Konsequenz, ein Satz'}],donts:[{t:'Bitte beachten Sie, dass die Angaben vollständig und korrekt sein müssen…',n:'Zu lang, Drohton, Passiv'},{t:'(kein Erklärtext, obwohl die Frage einen Fachbegriff enthält)',n:'Wichtige Info fehlt'}]}],
+  einfach:[{id:'FQ-003',title:'"Einfach erklärt" – niedrigschwellig, kurz',tags:[['tpl','Plain Language']],length:'2–3 Sätze max.',mandatory:'Bedingt',tone:'Alltagssprache, kein Juristendeutsch',instruction:'Kurze Erklärung unter dem Schlagwort „Einfach erklärt". Aktuell nicht fett hervorheben.',blocks:[{n:'1',t:'Schlagwort „Einfach erklärt"',b:'Pflicht',x:'Immer mit diesem Label einleiten. Nicht bolden.'},{n:'2',t:'Erklärung in Alltagssprache',b:'Pflicht',x:'Max. 2–3 Sätze. Kein Paragraf, kein Behördendeutsch.'}],dos:[{t:'Einfach erklärt: Beratungshilfe bedeutet, dass der Staat die Kosten einer Rechtsberatung übernimmt, wenn Sie sich das nicht leisten können.',n:'Alltagssprache, kurz, konkret'}],donts:[{t:'Einfach erklärt: Die Beratungshilfe ist eine staatliche Unterstützungsleistung gemäß BerHG.',n:'Gesetzesbezug, Fachbegriff, kein Mehrwert'}]}],
+  akko:[{id:'FQ-004',title:'Detail-Akkordion: Sonderfälle auslagern',tags:[['tstr','Struktur']],length:'Titel als Frage, Inhalt kurz',mandatory:'Bedingt',tone:'Sachlich, präzise',instruction:'Titel immer als Frage. Nur mit Erklärtext kombinieren – nie allein. Max. 3 pro Seite.',blocks:[{n:'1',t:'Titel als Frage',b:'Pflicht',x:'„Was gilt, wenn ich selbstständig bin?" – nicht „Selbstständige"'},{n:'2',t:'Nur mit Erklärtext',b:'Pflicht',x:'Akkordion will nicht allein sein.'},{n:'3',t:'Max. 3 pro Seite',b:'Pflicht',x:'Mehr als 3 ist ein Signal, die Frage aufzuteilen.'}],dos:[{t:'„Was gilt, wenn ich selbstständig bin?" + kurze Erklärung',n:'Frage als Titel, Sonderfall abgegrenzt'}],donts:[{t:'Akkordion ohne Erklärtext direkt unter der Headline',n:'Steht allein, verliert Kontext'},{t:'5 Akkordions auf einer Seite',n:'Frage muss aufgeteilt werden'}]}],
+  notice:[{id:'FQ-005',title:'Inline Notice: Warnung oder Tipp – nie beides',tags:[['tstr','Struktur'],['ttov','Ton']],length:'1–2 Sätze',mandatory:'Bedingt',tone:'Sachlich, klar, nicht alarmistisch',instruction:'Zwei Varianten: Warnung und Tipp. Nicht zusammen mit Tiles verwenden.',blocks:[{n:'1',t:'Warnung',b:'Bedingt',x:'Für Risiken, die jetzt bekannt sein müssen. Sachlich.'},{n:'2',t:'Tipp',b:'Bedingt',x:'Hilfreiche Hinweise, die das Ausfüllen erleichtern.'}],dos:[{t:'Tipp: Sie finden diese Angabe auf der Rückseite Ihres Einkommenssteuerbescheids.',n:'Konkret, hilfreich'},{t:'Achtung: Eine falsche Angabe kann die Bearbeitung verzögern.',n:'Sachliche Konsequenz'}],donts:[{t:'Wichtig: Bitte alle Felder vollständig ausfüllen!!!',n:'Alarmistisch, generisch'},{t:'Notice + Tiles auf derselben Seite',n:'Visuelle Verwechslung'}]}],
+  antwort:[{id:'FQ-006',title:'Antwortmöglichkeiten: vollständige Sätze, kein Punkt am Ende',tags:[['tpl','Plain Language'],['ttov','Ton'],['tstr','Struktur']],length:'Max. 1 Satz pro Antwort',mandatory:'Pflicht',tone:'Aktiv, vollständig, übersetzungssicher',instruction:'Antworten müssen länger als ein Wort sein. Kein Punkt am Ende. Nicht länger als ein Satz.',blocks:[{n:'1',t:'Radio Buttons',b:'Bedingt',x:'Single Choice. Kein „Ja/Nein". Besser: „Ja, ich habe eine Rechtsschutzversicherung."'},{n:'2',t:'Selection Tiles',b:'Bedingt',x:'Wenn Antworten mit Icons illustriert werden. Nicht mit Inline Notice kombinieren.'},{n:'3',t:'Checkboxes',b:'Bedingt',x:'Multi Choice. „Ich bin verheiratet" statt „Verheiratet".'}],dos:[{t:'Ja, ich habe eine Rechtsschutzversicherung.',n:'Vollständig, übersetzungssicher'},{t:'Ich bin verheiratet.',n:'Checkbox: vollständiger Satz'}],donts:[{t:'Ja / Nein',n:'Einwort-Antworten – Übersetzungsfehler wahrscheinlich'},{t:'Verheiratet',n:'Adjektiv allein, kein vollständiger Satz'}]}],
+  h1:[{id:'H1-001',title:'Nutzen statt Name',tags:[['tpl','Plain Language'],['tstr','Struktur']],length:'Max. 6 Wörter',mandatory:'Pflicht',tone:'Aktiv, konkret, kein Substantivstil',instruction:'Beginne mit dem stärksten Wort. Vermeide internen Dienstnamen als alleinigen Titel.',dos:[{t:'Mahnbescheid online beantragen',n:'Handlung + Kanal'},{t:'Gerichtsdolmetscher finden',n:'Konkret, kurz'}],donts:[{t:'Mahnverfahren',n:'Interner Name, kein Nutzen'},{t:'Kapitalanleger Musterverfahrensgesetz',n:'Gesetzesname, unverständlich'}]}],
+  lead:[{id:'LD-001',title:'Dienst erklären, Handlung vorbereiten',tags:[['tpl','Plain Language'],['ttov','Ton']],length:'1–2 Sätze, max. 30 Wörter',mandatory:'Pflicht',tone:'Neutral, direkt, kein Passiv',instruction:'Satz 1: Was kann man hier tun? Satz 2 optional: Was braucht man?',dos:[{t:'Hier stellen Sie online einen Mahnbescheid gegen Schuldner:innen.',n:'Handlung klar, direkt'}],donts:[{t:'Die Landesjustizverwaltungen bieten die Möglichkeit zur Online-Antragstellung.',n:'Behördenperspektive, passiv'}]}],
+  haupt:[{id:'HT-001',title:'Umfang: so lang wie nötig, nicht länger',tags:[['tstr','Struktur'],['tpl','Plain Language'],['tseo','SEO']],length:'Abhängig von Suchintention',mandatory:'Pflicht',tone:'Sachlich, strukturiert, aktiv',instruction:'Klar abgegrenzte Kapitel mit H2. Jedes Kapitel reisst ein Unterthema an.',blocks:[{n:'1',t:'Prozessüberblick',b:'Bedingt',x:'3–4 Schritte. Nur wenn erklärungsbedürftig.'},{n:'2',t:'Kapitel / Unterthemen',b:'Pflicht',x:'H2 pro Unterthema. Anreissen, nicht vollständig erklären.'},{n:'3',t:'Voraussetzungen & Unterlagen',b:'Bedingt',x:'Listenförmig, nicht als Prosa.'},{n:'4',t:'Weiterführende Links',b:'Bedingt',x:'Immer am Ende, nie vor dem CTA.'}],dos:[{t:'Was Sie bereithalten sollten: IBAN · Forderungsbetrag · Adresse',n:'Listenförmig, konkret'}],donts:[{t:'Das Mahnverfahren ist ein vereinfachtes gerichtliches Verfahren…',n:'Lexikoneintrag'}]}],
+  cta:[{id:'CTA-001',title:'Einer. Verb zuerst. Mit Erwartung.',tags:[['tpl','Plain Language'],['ttov','Ton']],length:'2–5 Wörter',mandatory:'Pflicht',tone:'Aktiv, neutral, handlungsorientiert',instruction:'Genau ein primärer CTA. Verb zuerst. Erwartung setzen.',dos:[{t:'Zum Mahnportal – Antrag stellen',n:'Ziel + Handlung'},{t:'Dolmetscher suchen',n:'Verb, konkret'}],donts:[{t:'Weiter',n:'Kein Kontext'},{t:'Zur Antragstellung',n:'Substantivstil'}]}],
+  warn:[{id:'WARN-001',title:'Warnung nach dem CTA, nie davor',tags:[['tstr','Struktur'],['ttov','Ton']],length:'Max. 3 Sätze',mandatory:'Bedingt',tone:'Sachlich, klar, nicht alarmistisch',instruction:'Immer nach dem primären CTA. Sachlich. Handlungsoption nennen.',dos:[{t:'Vorsicht: Einige Unternehmen versenden irreführende Rechnungen.',n:'Sachlich, konkret'}],donts:[{t:'WARNUNG: Betrüger sind aktiv!',n:'Alarmistisch'}]}],
+  'u-head':[{id:'ÜB-001',title:'Headline: Aufgabe statt Aktenzeichen',tags:[['tpl','Plain Language'],['tstr','Struktur']],length:'Max. 6 Wörter',mandatory:'Pflicht',tone:'Aktiv, konkret, kein Substantivstil',instruction:'Verb + Nutzen statt Verfahrensname. Die Headline beantwortet „Was kann ich hier tun".',dos:[{t:'Erbschein beantragen',n:'Verb + Aufgabe'},{t:'P-Konto schützt Ihr Geld bei Kontopfändung',n:'Nutzen direkt benannt'}],donts:[{t:'Pfändungsschutzkonto – Informationen',n:'Substantivstil, kein Nutzen'},{t:'Erbschein',n:'Nur Verfahrensname, keine Handlung'}]}],
+  'u-lead':[{id:'ÜB-002',title:'Lead: was finde ich hier, was kann ich tun',tags:[['tpl','Plain Language'],['ttov','Ton']],length:'1–2 Sätze',mandatory:'Pflicht',tone:'Neutral, direkt, „Sie"-Ansprache',instruction:'Satz 1: Worum geht es. Satz 2 optional: Was kann ich konkret tun oder prüfen.',dos:[{t:'Hier finden Sie Informationen über den Erbschein. Sie können prüfen, ob Sie einen Erbschein benötigen.',n:'Thema + Handlung'}],donts:[{t:'Informationen rund um das Thema Erbschein und das Nachlassverfahren.',n:'Kein Handlungsbezug, reine Themenangabe'}]}],
+  'u-toc':[{id:'ÜB-003',title:'Inhaltsverzeichnis nur bei langen Seiten',tags:[['tstr','Struktur']],length:'Max. 6–8 Einträge',mandatory:'Bedingt',tone:'Kurze Nominalphrasen oder Verben',instruction:'Erst ab ca. 5 H2-Abschnitten sinnvoll. Einträge entsprechen 1:1 den H2-Überschriften.',dos:[{t:'Dafür benötigen Sie einen Erbschein / So bekommen Sie einen Erbschein / Das kostet ein Erbschein',n:'Kurz, parallel aufgebaut'}],donts:[{t:'Inhaltsverzeichnis bei einer Seite mit nur 2 Abschnitten',n:'Unnötig, lenkt vom Inhalt ab'}]}],
+  'u-kurz':[{id:'ÜB-004',title:'Kurz erklärt: Kernaussage vor dem Fließtext',tags:[['tpl','Plain Language']],length:'3–5 Sätze',mandatory:'Bedingt',tone:'Alltagssprache, aktiv',instruction:'Beantwortet „Was bedeutet das für mich konkret", bevor der Fließtext ins Detail geht. Kein Ersatz für den Lead, sondern Ergänzung bei komplexen Themen.',dos:[{t:'Mit einem Erbschein können Sie nachweisen, dass Ihnen ein Erbe zusteht. Sie brauchen ihn nur in bestimmten Fällen.',n:'Konkret, handlungsrelevant'}],donts:[{t:'Der Erbschein ist ein amtliches Zeugnis über das Erbrecht gemäß § 2353 BGB.',n:'Definition statt Handlungsrelevanz'}]}],
+  'u-wegweiser':[{id:'ÜB-005',title:'Wegweiser-CTA: Erwartung setzen, dann verlinken',tags:[['tstr','Struktur'],['ttov','Ton']],length:'2–3 Bulletpoints + 1 Button',mandatory:'Bedingt',tone:'Direkt, „Sie erfahren …"',instruction:'Vor dem Button kurz erklären, was das interaktive Tool liefert. Nie Button ohne Erwartungssteuerung.',dos:[{t:'Sie erfahren, ob Sie einen Erbschein brauchen und wie Sie ihn bekommen. → Erbschein-Wegweiser starten',n:'Erwartung + klarer CTA-Text'}],donts:[{t:'→ Wegweiser starten',n:'Kein Kontext, unklarer Nutzen'}]}],
+  'u-haupt':[{id:'ÜB-006',title:'Inhaltsblöcke: ein Unterthema pro H2',tags:[['tstr','Struktur'],['tpl','Plain Language']],length:'Abhängig vom Thema',mandatory:'Pflicht',tone:'Sachlich, strukturiert',instruction:'Jeder H2-Abschnitt behandelt genau ein Unterthema. H3 nur für klar abgrenzbare Sonderfälle. Listen statt Schachtelsätze bei Aufzählungen.',blocks:[{n:'1',t:'H2 pro Unterthema',b:'Pflicht',x:'Kein Abschnitt ohne eigene Überschrift, kein Mischen von Themen.'},{n:'2',t:'H3 für Sonderfälle',b:'Bedingt',x:'Nur wenn ein Sonderfall innerhalb des Unterthemas eine eigene Erklärung braucht.'},{n:'3',t:'Listen für Aufzählungen',b:'Bedingt',x:'Kosten, Voraussetzungen, Dokumente: immer als Liste, nie als Fließtext-Aufzählung.'}],dos:[{t:'10.000 Euro Erbschaft: 150 Euro Gebühr / 50.000 Euro: 330 Euro Gebühr …',n:'Liste statt Fließtext'}],donts:[{t:'Die Kosten betragen je nach Erbschaft zwischen 150 und mehreren Tausend Euro, wobei sich die genaue Höhe nach dem Wert richtet und außerdem davon abhängt, ob …',n:'Schachtelsatz statt Liste'}]}],
+  'u-schritt':[{id:'ÜB-007',title:'Schrittliste: Titel + 1–2 Sätze + optionaler Link',tags:[['tstr','Struktur'],['tpl','Plain Language']],length:'Max. 5–6 Schritte',mandatory:'Bedingt',tone:'Aktiv, handlungsorientiert',instruction:'Jeder Schritt hat einen kurzen Aktions-Titel und endet auf einem nachvollziehbaren Zwischenstand. Ab 7 Schritten lieber aufteilen oder zusammenfassen.',dos:[{t:'1. Erbfall verstehen – Im Wegweiser erfahren Sie, ob Sie einen Erbschein benötigen.',n:'Aktions-Titel + kurzer Text'}],donts:[{t:'1. Schritt eins  2. Schritt zwei  3. Schritt drei',n:'Keine inhaltliche Aussage im Titel'}]}],
+  'u-verweis':[{id:'ÜB-008',title:'Verweis-Satz statt nacktem Link',tags:[['tstr','Struktur'],['ttov','Ton']],length:'1 Satz',mandatory:'Bedingt',tone:'Direkt, Verb zuerst im Linktext',instruction:'Link immer in einen vollständigen Satz einbetten, der den Mehrwert nennt. Linktext nie „hier" oder „mehr".',dos:[{t:'Erfahren Sie mehr darüber, wann Sie Raten zahlen müssen.',n:'Kontext + Mehrwert im Linktext'}],donts:[{t:'Mehr Infos hier.',n:'Kein Kontext, generischer Linktext'}]}],
+  'u-formular':[{id:'ÜB-009',title:'Formular-CTA: Ablauf vorab erklären',tags:[['tstr','Struktur'],['ttov','Ton']],length:'2–4 Bulletpoints + 1 Button',mandatory:'Bedingt',tone:'Direkt, schrittweise',instruction:'Vor dem Button in Stichpunkten erklären, was passiert (Fragen beantworten, Ergebnis erhalten, einreichen). Reduziert Abbruch durch Unsicherheit.',dos:[{t:'Beantworten Sie einfache Fragen. Sie erhalten sofort ein fertig ausgefülltes PDF. Reichen Sie es bei Ihrer Bank ein. → Girokonto in P-Konto umwandeln',n:'Ablauf transparent, dann CTA'}],donts:[{t:'→ Formular ausfüllen',n:'Kein Hinweis, was danach passiert'}]}],
+  seo:[{id:'SEO-001',title:'Title tag: 50–60 Zeichen, Keyword am Anfang',tags:[['tseo','SEO']],length:'50–60 Zeichen',mandatory:'Pflicht',tone:'Keyword-orientiert, lesbar',instruction:'Wichtigstes Keyword in den ersten 3 Wörtern.',dos:[{t:'Mahnbescheid beantragen – Justizportal',n:'Keyword zuerst'}],donts:[{t:'Justizportal des Bundes und der Länder: Mahnverfahren',n:'Behördenname zuerst'}]},{id:'SEO-002',title:'Meta description: Handlung + Nutzen, max. 155 Zeichen',tags:[['tseo','SEO'],['ttov','Ton']],length:'Max. 155 Zeichen',mandatory:'Pflicht',tone:'Aktiv, einladend',instruction:'Was kann ich tun? Immer Handlung nennen.',dos:[{t:'Mahnbescheid online stellen: Antrag erfassen, einreichen, Status verfolgen.',n:'Handlung, Reichweite'}],donts:[{t:'Informationen zum Mahnverfahren auf dem Justizportal.',n:'Kein Nutzen'}]}]
+};
+
+function show(id){ document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');}); document.getElementById(id).classList.add('active'); }
+function bc(id,parts){ document.getElementById(id).innerHTML=parts.filter(Boolean).map(function(p,i,a){ return '<span'+(i===a.length-1?' class="cur"':'')+'>'+p+'</span>'; }).join('<span class="sep"> › </span>'); }
+
+function setActiveWf(key){
+  document.querySelectorAll('.wf-block').forEach(function(b){ b.classList.remove('wf-active'); });
+  document.querySelectorAll('.wf-sitem').forEach(function(b){ b.classList.remove('wf-active'); });
+  var wfEl=document.getElementById('wf-'+key);
+  if(wfEl) wfEl.classList.add('wf-active');
+  var sEl=document.querySelector('[data-skey="'+key+'"]');
+  if(sEl) sEl.classList.add('wf-active');
+}
+
+function selectElem(key, label){
+  elemKey=key; elem=label;
+  setActiveWf(key);
+  if(isFrage){
+    bc('bc3',[page,elem]);
+    renderRules(key);
+    show('s3');
+  } else {
+    bc('bc2',[page,elem]);
+    // build audience opts
+    var ao=document.getElementById('aud-opts');
+    ao.innerHTML='';
+    auds.forEach(function(a){
+      var btn=document.createElement('button');
+      btn.className='opt';
+      btn.innerHTML='<i class="ti '+a.icon+' oi"></i><span class="ot">'+a.label+'</span><span class="os">'+a.sub+'</span>';
+      btn.addEventListener('click',function(){
+        bc('bc3',[page,elem,a.label]);
+        renderRules(key);
+        show('s3');
+      });
+      ao.appendChild(btn);
+    });
+    show('s2');
+  }
+}
+
+// Build sidebar for Frageseite
+function buildFrageSidebar(){
+  var sb=document.getElementById('wf-sidebar');
+  sb.innerHTML='';
+  frageElems.forEach(function(e){
+    var div=document.createElement('div');
+    div.className='wf-sitem wf-sitem-bg';
+    div.setAttribute('data-skey',e.key);
+    div.innerHTML='<div style="font-weight:600;font-size:13px;color:var(--kern-t)">'+e.label+'</div><div class="wf-sitem-sub">'+e.sub+'</div>';
+    div.addEventListener('click',function(){ selectElem(e.key, e.label); });
+    sb.appendChild(div);
+  });
+  // Wire wireframe blocks
+  document.querySelectorAll('.wf-block').forEach(function(b){
+    var key=b.getAttribute('data-key');
+    if(key){
+      b.addEventListener('click',function(){
+        var match=frageElems.find(function(e){return e.key===key;});
+        if(match) selectElem(match.key, match.label);
+      });
+    }
+  });
+}
+
+// Build sidebar for Übersichtsseite
+function buildUeberSidebar(){
+  var sb=document.getElementById('wf-sidebar-ueber');
+  sb.innerHTML='';
+  ueberElems.forEach(function(e){
+    var div=document.createElement('div');
+    div.className='wf-sitem wf-sitem-bg';
+    div.setAttribute('data-skey',e.key);
+    div.innerHTML='<div style="font-weight:600;font-size:13px;color:var(--kern-t)">'+e.label+'</div><div class="wf-sitem-sub">'+e.sub+'</div>';
+    div.addEventListener('click',function(){ selectElem(e.key, e.label); });
+    sb.appendChild(div);
+  });
+  document.querySelectorAll('#ueber-layout .wf-block').forEach(function(b){
+    var key=b.getAttribute('data-key');
+    if(key){
+      b.addEventListener('click',function(){
+        var match=ueberElems.find(function(e){return e.key===key;});
+        if(match) selectElem(match.key, match.label);
+      });
+    }
+  });
+}
+
+// Build page opts
+var po=document.getElementById('page-opts');
+pages.forEach(function(p){
+  var btn=document.createElement('button');
+  btn.className='opt';
+  btn.innerHTML='<i class="ti '+p.icon+' oi"></i><span class="ot">'+p.label+'</span><span class="os">'+p.sub+'</span>'+(p.badge?'<span class="obadge">'+p.badge+'</span>':'');
+  btn.addEventListener('click',function(){
+    page=p.label; isFrage=(p.key==='frage'); isUeber=(p.key==='ueber');
+    document.getElementById('s1lbl').textContent=isFrage?'Schritt 2 von 2':'Schritt 2 von 3';
+    bc('bc1',[page]);
+    document.getElementById('frage-layout').style.display='none';
+    document.getElementById('ueber-layout').style.display='none';
+    document.getElementById('default-opts').style.display='none';
+    if(isFrage){
+      document.getElementById('frage-layout').style.display='grid';
+      buildFrageSidebar();
+    } else if(isUeber){
+      document.getElementById('ueber-layout').style.display='grid';
+      buildUeberSidebar();
+    } else {
+      document.getElementById('default-opts').style.display='grid';
+      var dOpts=document.getElementById('default-opts');
+      dOpts.innerHTML='';
+      defaultElems.forEach(function(e){
+        var eb=document.createElement('button');
+        eb.className='opt';
+        eb.innerHTML='<i class="ti '+e.icon+' oi"></i><span class="ot">'+e.label+'</span><span class="os">'+e.sub+'</span>'+(e.badge?'<span class="obadge">'+e.badge+'</span>':'');
+        eb.addEventListener('click',function(){ selectElem(e.key,e.label); });
+        dOpts.appendChild(eb);
+      });
+    }
+    show('s1');
+  });
+  po.appendChild(btn);
+});
+
+document.getElementById('back1').addEventListener('click',function(){ show('s0'); });
+document.getElementById('back2').addEventListener('click',function(){ show('s1'); });
+document.getElementById('back3').addEventListener('click',function(){ isFrage?show('s1'):show('s2'); });
+document.getElementById('btn-ex').addEventListener('click',function(){ sendPrompt('Zeig mir weitere Beispiele für '+elem+' auf einer '+page); });
+document.getElementById('btn-err').addEventListener('click',function(){ sendPrompt('Welche häufigen Fehler passieren beim Schreiben von '+elem+' im Justizkontext?'); });
+
+function renderRules(key){
+  var set=rules[key]||[];
+  if(!set.length){ document.getElementById('rule-list').innerHTML='<p style="font-size:14px;color:var(--kern-m)">Noch keine Regeln hinterlegt.</p>'; return; }
+  var html='';
+  set.forEach(function(r){
+    var tags=(r.tags||[]).map(function(t){ return '<span class="tag '+t[0]+'">'+t[1]+'</span>'; }).join('');
+    var dos=(r.dos||[]).map(function(d){ return '<div class="ddi">✓ <span>'+d.t+'<span class="dn">'+d.n+'</span></span></div>'; }).join('');
+    var donts=(r.donts||[]).map(function(d){ return '<div class="ddi">✕ <span>'+d.t+'<span class="dn">'+d.n+'</span></span></div>'; }).join('');
+    html+='<div class="rule"><div class="rh"><div class="rt">'+r.title+'</div><span class="rid">'+r.id+'</span></div>';
+    html+='<div class="tags">'+tags+'</div>';
+    html+='<div class="meta"><span class="pill"><strong>Länge</strong> '+r.length+'</span><span class="pill"><strong>Ton</strong> '+r.tone+'</span><span class="pill"><strong>'+r.mandatory+'</strong></span></div>';
+    html+='<div class="instr">'+r.instruction+'</div>';
+    if(r.blocks&&r.blocks.length){
+      html+='<div class="slbl">Inhaltsblöcke</div><div class="blocks">';
+      r.blocks.forEach(function(b){ html+='<div class="blk"><div class="bn">'+b.n+'</div><div><div class="bt">'+b.t+'</div><div class="bx">'+b.x+'</div></div><span class="bb'+(b.b==='Pflicht'?' p':'')+'">'+b.b+'</span></div>'; });
+      html+='</div>';
+    }
+    html+='<div class="slbl">Beispiele</div><div class="ddg"><div class="dd ddo"><div class="ddl">Do</div>'+dos+'</div><div class="dd ddn"><div class="ddl">Don\'t</div>'+donts+'</div></div></div>';
+  });
+  document.getElementById('rule-list').innerHTML=html;
+}
+})();
+</script>
