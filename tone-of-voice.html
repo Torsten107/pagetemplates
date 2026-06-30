@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tone of Voice – Justizportal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --t: #1a1a2e; --m: #5c5f72; --bg: #f5f5f7;
+    --s: #ffffff; --h: #eeeef3; --b: #c8c9d4;
+    --a: #1a4f9e; --abg: #e8eef8;
+    --green-b: #1a6e40; --green-bg: #e6f4ec;
+    --amber-b: #8a5800; --amber-bg: #fef3e2;
+    --red-b: #b91c1c; --red-bg: #fde8e8;
+    --gray-b: #444441; --gray-bg: #eeeef3;
+    --f: 'Fira Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--f); background: var(--bg); color: var(--t); padding: 32px 24px; }
+  .doc { max-width: 760px; margin: 0 auto; background: var(--s); border-radius: 8px; padding: 40px 48px; }
+  .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--m); margin-bottom: 6px; }
+  h1 { font-size: 26px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 15px; color: var(--m); margin-bottom: 28px; }
+  .intro { font-size: 15px; line-height: 1.7; margin-bottom: 14px; border-left: 3px solid var(--a); padding-left: 16px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 32px; }
+  .pill { font-size: 12px; color: var(--a); background: var(--abg); border-radius: 20px; padding: 4px 12px; }
+  hr { border: none; border-top: 1px solid var(--b); margin: 0 0 24px; }
+  .sec-label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--m); margin: 0 0 14px; }
+  .tone-card { border: 1px solid var(--b); border-radius: 8px; margin-bottom: 14px; overflow: hidden; page-break-inside: avoid; }
+  .tone-card.basis { background: var(--h); }
+  .tc-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--b); }
+  .badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
+  .t-n { background: var(--gray-bg); color: var(--gray-b); border: 1px solid var(--b); }
+  .t-h { background: var(--abg); color: var(--a); }
+  .t-b { background: var(--green-bg); color: var(--green-b); }
+  .t-m { background: var(--amber-bg); color: var(--amber-b); }
+  .t-u { background: var(--red-bg); color: var(--red-b); }
+  .meta { font-size: 11px; font-weight: 500; color: var(--m); }
+  .tc-body { padding: 16px 18px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+  .tc-col p { margin: 0 0 6px; font-size: 13.5px; line-height: 1.6; }
+  .tc-col .sub { color: var(--m); display: block; margin-top: 2px; }
+  .tc-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--m); margin-bottom: 5px; display: block; }
+  .sliders { display: flex; flex-direction: column; gap: 8px; }
+  .slider-row { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 8px; }
+  .slider-name { font-size: 11px; color: var(--m); }
+  .slider-track { position: relative; height: 4px; background: var(--b); border-radius: 4px; }
+  .slider-dot { position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: var(--a); transform: translate(-50%, -50%); }
+  .ref-box { background: var(--h); border: 1px solid var(--b); border-radius: 8px; padding: 14px 18px; font-size: 13px; color: var(--m); margin: 28px 0; display: flex; align-items: center; gap: 10px; }
+  .footer { margin-top: 28px; font-size: 12px; color: var(--m); border-top: 1px solid var(--b); padding-top: 14px; display: flex; justify-content: space-between; }
+  .print-btn { position: fixed; top: 20px; right: 20px; background: var(--a); color: #fff; border: none; border-radius: 6px; padding: 10px 18px; font-family: var(--f); font-size: 14px; font-weight: 500; cursor: pointer; }
+  @media print {
+    .print-btn { display: none; }
+    body { background: #fff; padding: 0; }
+    .doc { box-shadow: none; padding: 0; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Als PDF drucken</button>
+
+<div class="doc">
+  <p class="eyebrow">Styleguide · Justizportal</p>
+  <h1>Tone of Voice</h1>
+  <p class="subtitle">Wie wir schreiben, und warum es darauf ankommt</p>
+
+  <p class="intro">Das Justizportal wird von einem breiten Publikum genutzt: Bürgerinnen und Bürgern in konkreten Rechtssituationen ebenso wie Anwaltschaft, Justizmitarbeitenden und Beschäftigten in Behörden und Ministerien. Was alle verbindet: Sie kommen mit einem klaren Anliegen und erwarten verlässliche, verständliche Informationen.</p>
+  <p class="intro">Unser Ton ist klar, respektvoll und situationsgerecht, weder bürokratisch noch vereinfachend. Er passt sich der Aufgabe an, nicht unserer Persönlichkeit. Der Ton ist kein fixer Schalter, sondern ein Regler: Je nach Kontext wählen wir den passenden Tonalitätsmix.</p>
+
+  <div class="pills">
+    <span class="pill">Aufgabenbezogen</span>
+    <span class="pill">Situationsgerecht</span>
+    <span class="pill">Nicht binär, mischbar</span>
+    <span class="pill">Auf allen Ebenen anwendbar</span>
+  </div>
+
+  <hr>
+
+  <p class="sec-label">Basiston, immer aktiv</p>
+
+  <div class="tone-card basis" id="ton-neutral">
+    <div class="tc-header">
+      <span class="badge t-n">Neutral</span>
+      <span class="meta">Grundmodus</span>
+    </div>
+    <div class="tc-body">
+      <div class="tc-col">
+        <span class="tc-label">Wann</span>
+        <p>Navigation, Labels, Status, CTAs, überall wo funktionale Klarheit zählt</p>
+        <span class="tc-label" style="margin-top:8px;">So klingt es</span>
+        <p>Kurz. Knackig. Funktional.<span class="sub">„Weiter", „Antrag einreichen", „Schritt 2 von 4"</span></p>
+      </div>
+      <div class="tc-col">
+        <span class="tc-label">Reglerstellung</span>
+        <div class="sliders">
+          <div class="slider-row"><span class="slider-name">Häufigkeit</span><div class="slider-track"><div class="slider-dot" style="left:80%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Textlänge</span><div class="slider-track"><div class="slider-dot" style="left:10%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Information</span><div class="slider-track"><div class="slider-dot" style="left:15%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Wir/Sie</span><div class="slider-track"><div class="slider-dot" style="left:10%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Emotion</span><div class="slider-track"><div class="slider-dot" style="left:5%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tone-card basis" id="ton-hilfreich">
+    <div class="tc-header">
+      <span class="badge t-h">Hilfreich</span>
+      <span class="meta">Standarderweiterung</span>
+    </div>
+    <div class="tc-body">
+      <div class="tc-col">
+        <span class="tc-label">Wann</span>
+        <p>Kontext, Erklärungen, Hinweise, wenn Nutzende mehr wissen müssen</p>
+        <span class="tc-label" style="margin-top:8px;">So klingt es</span>
+        <p>Relevant. Kompetent. Anleitend.<span class="sub">„Das bedeutet …", „Bitte beachten Sie …"</span></p>
+      </div>
+      <div class="tc-col">
+        <span class="tc-label">Reglerstellung</span>
+        <div class="sliders">
+          <div class="slider-row"><span class="slider-name">Häufigkeit</span><div class="slider-track"><div class="slider-dot" style="left:50%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Textlänge</span><div class="slider-track"><div class="slider-dot" style="left:65%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Information</span><div class="slider-track"><div class="slider-dot" style="left:70%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Wir/Sie</span><div class="slider-track"><div class="slider-dot" style="left:50%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Emotion</span><div class="slider-track"><div class="slider-dot" style="left:25%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sec-label" style="margin-top:24px;">Situative Töne, nach Kontext</p>
+
+  <div class="tone-card" id="ton-beruhigend">
+    <div class="tc-header">
+      <span class="badge t-b">Beruhigend</span>
+    </div>
+    <div class="tc-body">
+      <div class="tc-col">
+        <span class="tc-label">Wann</span>
+        <p>Unsicherheit, Zweifel, Abschluss, wenn Vertrauen gefragt ist</p>
+        <span class="tc-label" style="margin-top:8px;">So klingt es</span>
+        <p>Ruhig. Verlässlich. Persönlich.<span class="sub">„Wir schicken Ihnen eine Bestätigung"</span></p>
+      </div>
+      <div class="tc-col">
+        <span class="tc-label">Reglerstellung</span>
+        <div class="sliders">
+          <div class="slider-row"><span class="slider-name">Häufigkeit</span><div class="slider-track"><div class="slider-dot" style="left:20%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Textlänge</span><div class="slider-track"><div class="slider-dot" style="left:50%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Information</span><div class="slider-track"><div class="slider-dot" style="left:45%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Wir/Sie</span><div class="slider-track"><div class="slider-dot" style="left:75%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Emotion</span><div class="slider-track"><div class="slider-dot" style="left:55%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tone-card" id="ton-motivierend">
+    <div class="tc-header">
+      <span class="badge t-m">Motivierend</span>
+    </div>
+    <div class="tc-body">
+      <div class="tc-col">
+        <span class="tc-label">Wann</span>
+        <p>Zwischenziele, Prozessabschluss, Fokus auf nächsten Schritt</p>
+        <span class="tc-label" style="margin-top:8px;">So klingt es</span>
+        <p>Kühl. Ermutigend. Energetisch.<span class="sub">„Fast am Ziel", „Nächster Schritt:"</span></p>
+      </div>
+      <div class="tc-col">
+        <span class="tc-label">Reglerstellung</span>
+        <div class="sliders">
+          <div class="slider-row"><span class="slider-name">Häufigkeit</span><div class="slider-track"><div class="slider-dot" style="left:15%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Textlänge</span><div class="slider-track"><div class="slider-dot" style="left:15%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Information</span><div class="slider-track"><div class="slider-dot" style="left:20%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Wir/Sie</span><div class="slider-track"><div class="slider-dot" style="left:40%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Emotion</span><div class="slider-track"><div class="slider-dot" style="left:80%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tone-card" id="ton-unterstuetzend">
+    <div class="tc-header">
+      <span class="badge t-u">Unterstützend</span>
+    </div>
+    <div class="tc-body">
+      <div class="tc-col">
+        <span class="tc-label">Wann</span>
+        <p>Fehler, Frustration, gescheiterte Aktionen</p>
+        <span class="tc-label" style="margin-top:8px;">So klingt es</span>
+        <p>Besorgt. Menschlich. Lösungsorientiert.<span class="sub">„Es sieht aus, als wäre etwas schiefgelaufen"</span></p>
+      </div>
+      <div class="tc-col">
+        <span class="tc-label">Reglerstellung</span>
+        <div class="sliders">
+          <div class="slider-row"><span class="slider-name">Häufigkeit</span><div class="slider-track"><div class="slider-dot" style="left:15%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Textlänge</span><div class="slider-track"><div class="slider-dot" style="left:40%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Information</span><div class="slider-track"><div class="slider-dot" style="left:35%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Wir/Sie</span><div class="slider-track"><div class="slider-dot" style="left:80%"></div></div></div>
+          <div class="slider-row"><span class="slider-name">Emotion</span><div class="slider-track"><div class="slider-dot" style="left:70%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-box">
+    <span>Welcher Ton passt wann? Das Tone-Research-Modul liefert Interviewfragen, die Ton-relevante Erkenntnisse systematisch erzeugen.</span>
+  </div>
+
+  <div class="footer">
+    <span>Justizportal · DigitalService</span>
+    <span>Tone of Voice · v0.1 · Entwurf</span>
+  </div>
+</div>
+
+</body>
+</html>
